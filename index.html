@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ex. No. 9 | Working with MongoDB using Shell Commands</title>
+<style>
+:root{--primary:#e63946;--primary-dark:#c1121f;--dark:#111827;--dark-2:#1f2937;--light:#f4f6f9;--card:#fff;--text:#1f2937;--muted:#6b7280;--border:#d9dee6;--radius:14px;--shadow:0 8px 24px rgba(17,24,39,.08)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",system-ui,Arial,sans-serif;background:var(--light);color:var(--text);line-height:1.6}
+.container{width:min(1000px,92%);margin:0 auto}
+header{background:var(--dark);position:sticky;top:0;z-index:5;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.bar{display:flex;align-items:center;justify-content:space-between;min-height:60px;flex-wrap:wrap;gap:6px}
+.brand{color:#fff;font-weight:800;letter-spacing:1px}.brand span{color:var(--primary)}
+nav a{color:#d1d5db;padding:6px 12px;border-radius:8px;text-decoration:none;font-weight:500}
+nav a:hover{background:var(--primary);color:#fff}
+.hero{background:linear-gradient(135deg,var(--dark),var(--dark-2));color:#fff;padding:60px 0}
+.eyebrow{color:var(--primary);font-weight:700;text-transform:uppercase;letter-spacing:2px;font-size:.8rem}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);line-height:1.1;margin:8px 0 12px}
+.hero p{color:#d1d5db;max-width:700px}
+main{padding:40px 0}
+.card{background:var(--card);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);margin-bottom:24px}
+.card h2{margin-bottom:4px;color:var(--dark)}
+.card h3{margin:18px 0 8px;font-size:1rem;color:var(--primary-dark)}
+.muted{color:var(--muted);font-size:.92rem;margin-top:10px}
+.code{position:relative}
+pre{background:var(--dark);color:#e5e7eb;padding:16px;border-radius:10px;overflow-x:auto;font-size:.88rem;line-height:1.5}
+code{font-family:Consolas,monospace;background:#eef0f4;padding:2px 6px;border-radius:5px}
+.copy{position:absolute;top:8px;right:8px;background:var(--primary);color:#fff;border:0;border-radius:8px;padding:5px 12px;font-weight:600;cursor:pointer}
+.copy:hover{background:var(--primary-dark)}
+footer{background:var(--dark);color:#d1d5db;text-align:center;padding:22px 0;font-size:.9rem}
+@media(max-width:640px){.card{padding:18px}.hero{padding:40px 0}}
+</style></head><body>
+<header><div class="container bar"><div class="brand">FITLIFE <span>TRAINING</span></div><nav><a href="#q1">Q1</a><a href="#q2">Q2</a><a href="#q3">Q3</a><a href="#q4">Q4</a><a href="#q5">Q5</a></nav></div></header>
+<section class="hero"><div class="container"><p class="eyebrow">Ex. No: 9</p><h1>Working with MongoDB using Shell Commands</h1>
+<p>Creating databases and collections, inserting, retrieving, updating and deleting documents, and querying data with mongosh.</p></div></section>
+<main class="container"><section class="card" id="q1"><h2>1. Student Database Management</h2><p class="muted">Student Database Management  (database: CollegeDB, collection: students)</p><h3>Setup: create database, collection and insert 5 students</h3><div class="code"><button class="copy">Copy</button><pre>db.students.drop();                       // start clean so the script can be re-run
+db.createCollection("students");
+db.students.insertMany([
+  { rollNo: 101, name: "Arun",  department: "CSE", age: 20, mark: 85 },
+  { rollNo: 102, name: "Priya", department: "IT",  age: 21, mark: 92 },
+  { rollNo: 103, name: "Kumar", department: "CSE", age: 19, mark: 78 },
+  { rollNo: 104, name: "Divya", department: "ECE", age: 20, mark: 88 },
+  { rollNo: 105, name: "Ravi",  department: "CSE", age: 22, mark: 67 }
+]);</pre></div><h3>a. Display all student records</h3><div class="code"><button class="copy">Copy</button><pre>printjson(db.students.find().toArray());</pre></div><h3>b. Retrieve a student using the roll number</h3><div class="code"><button class="copy">Copy</button><pre>printjson(db.students.findOne({ rollNo: 102 }));</pre></div><h3>c. Students who scored more than 80 marks</h3><div class="code"><button class="copy">Copy</button><pre>printjson(db.students.find({ mark: { $gt: 80 } }).toArray());</pre></div><h3>d. Update the marks of a particular student</h3><div class="code"><button class="copy">Copy</button><pre>db.students.updateOne({ rollNo: 101 }, { $set: { mark: 90 } });
+printjson(db.students.findOne({ rollNo: 101 }));    // verify</pre></div><h3>e. Delete a student record using the roll number</h3><div class="code"><button class="copy">Copy</button><pre>db.students.deleteOne({ rollNo: 105 });
+printjson(db.students.find().toArray());            // verify</pre></div><p class="muted">Run: <code>mongosh --file scripts/01_student_database.js</code></p></section><section class="card" id="q2"><h2>2. Employee Database</h2><p class="muted">Employee Database  (database: EmployeeDB, collection: employees)</p><h3>Setup: create database, collection and insert 5 employees</h3><div class="code"><button class="copy">Copy</button><pre>db.employees.drop();
+db.createCollection("employees");
+db.employees.insertMany([
+  { empId: 1, name: "Anita",  department: "HR",      salary: 35000, experience: 3 },
+  { empId: 2, name: "Bala",   department: "IT",      salary: 52000, experience: 5 },
+  { empId: 3, name: "Charan", department: "IT",      salary: 45000, experience: 4 },
+  { empId: 4, name: "Deepa",  department: "Finance", salary: 40000, experience: 6 },
+  { empId: 5, name: "Eswar",  department: "IT",      salary: 60000, experience: 8 }
+]);</pre></div><h3>a. Display all employees</h3><div class="code"><button class="copy">Copy</button><pre>printjson(db.employees.find().toArray());</pre></div><h3>b. Employees earning more than Rs. 40,000</h3><div class="code"><button class="copy">Copy</button><pre>printjson(db.employees.find({ salary: { $gt: 40000 } }).toArray());</pre></div><h3>c. Update the salary of an employee</h3><div class="code"><button class="copy">Copy</button><pre>db.employees.updateOne({ empId: 1 }, { $set: { salary: 38000 } });
+printjson(db.employees.findOne({ empId: 1 }));      // verify</pre></div><h3>d. Employees in descending order of salary</h3><div class="code"><button class="copy">Copy</button><pre>printjson(db.employees.find().sort({ salary: -1 }).toArray());</pre></div><h3>e. Count employees in a particular department (IT)</h3><div class="code"><button class="copy">Copy</button><pre>print(db.employees.countDocuments({ department: "IT" }));</pre></div><p class="muted">Run: <code>mongosh --file scripts/02_employee_database.js</code></p></section><section class="card" id="q3"><h2>3. Product Database</h2><p class="muted">Product Database  (database: ProductDB, collection: products)</p><h3>Setup: create database, collection and insert products</h3><div class="code"><button class="copy">Copy</button><pre>db.products.drop();
+db.createCollection("products");
+db.products.insertMany([
+  { productId: 1, name: "Keyboard",   category: "Electronics", price: 1200,  stock: 25 },
+  { productId: 2, name: "Mouse",      category: "Electronics", price: 600,   stock: 40 },
+  { productId: 3, name: "Notebook",   category: "Stationery",  price: 80,    stock: 0  },
+  { productId: 4, name: "Headphones", category: "Electronics", price: 2500,  stock: 15 },
+  { productId: 5, name: "Backpack",   category: "Accessories", price: 1800,  stock: 10 },
+  { productId: 6, name: "Pen Pack",   category: "Stationery",  price: 120,   stock: 0  },
+  { productId: 7, name: "Monitor",    category: "Electronics", price: 9500,  stock: 5  }
+]);</pre></div><h3>a. Products belonging to a specific category</h3><div class="code"><button class="copy">Copy</button><pre>printjson(db.products.find({ category: "Electronics" }).toArray());</pre></div><h3>b. Products priced between Rs. 500 and Rs. 2,000</h3><div class="code"><button class="copy">Copy</button><pre>printjson(db.products.find({ price: { $gte: 500, $lte: 2000 } }).toArray());</pre></div><h3>c. Increase the stock quantity of a product (+20)</h3><div class="code"><button class="copy">Copy</button><pre>db.products.updateOne({ productId: 2 }, { $inc: { stock: 20 } });
+printjson(db.products.findOne({ productId: 2 }));   // verify</pre></div><h3>d. Delete products whose stock quantity is zero</h3><div class="code"><button class="copy">Copy</button><pre>db.products.deleteMany({ stock: 0 });
+printjson(db.products.find().toArray());            // verify</pre></div><h3>e. Display the five most expensive products</h3><div class="code"><button class="copy">Copy</button><pre>printjson(db.products.find().sort({ price: -1 }).limit(5).toArray());</pre></div><p class="muted">Run: <code>mongosh --file scripts/03_product_database.js</code></p></section><section class="card" id="q4"><h2>4. Library Database</h2><p class="muted">Library Database  (database: LibraryDB, collection: books)</p><h3>Setup: create database, collection and insert books</h3><div class="code"><button class="copy">Copy</button><pre>db.books.drop();
+db.createCollection("books");
+db.books.insertMany([
+  { bookId: 1, title: "Wings of Fire",          author: "A.P.J. Abdul Kalam", category: "Biography", price: 250 },
+  { bookId: 2, title: "Clean Code",             author: "Robert C. Martin",   category: "Technology", price: 550 },
+  { bookId: 3, title: "The Pragmatic Programmer", author: "Andrew Hunt",      category: "Technology", price: 600 },
+  { bookId: 4, title: "Ignited Minds",          author: "A.P.J. Abdul Kalam", category: "Self-Help",  price: 220 },
+  { bookId: 5, title: "Godan",                  author: "Premchand",          category: "Fiction",    price: 180 }
+]);</pre></div><h3>a. All books written by a specified author</h3><div class="code"><button class="copy">Copy</button><pre>printjson(db.books.find({ author: "A.P.J. Abdul Kalam" }).toArray());</pre></div><h3>b. Books belonging to a particular category</h3><div class="code"><button class="copy">Copy</button><pre>printjson(db.books.find({ category: "Technology" }).toArray());</pre></div><h3>c. Update the price of a book</h3><div class="code"><button class="copy">Copy</button><pre>db.books.updateOne({ bookId: 5 }, { $set: { price: 200 } });
+printjson(db.books.findOne({ bookId: 5 }));         // verify</pre></div><h3>d. Sort books alphabetically by title</h3><div class="code"><button class="copy">Copy</button><pre>printjson(db.books.find().sort({ title: 1 }).toArray());</pre></div><h3>e. Count the number of books in the collection</h3><div class="code"><button class="copy">Copy</button><pre>print(db.books.countDocuments());</pre></div><p class="muted">Run: <code>mongosh --file scripts/04_library_database.js</code></p></section><section class="card" id="q5"><h2>5. Query Operations</h2><p class="muted">Query Operations on the students collection (CollegeDB)</p><h3>Setup: reset the students collection</h3><div class="code"><button class="copy">Copy</button><pre>db.students.drop();
+db.students.insertMany([
+  { rollNo: 101, name: "Arun",  department: "CSE", age: 20, mark: 85 },
+  { rollNo: 102, name: "Priya", department: "IT",  age: 21, mark: 92 },
+  { rollNo: 103, name: "Kumar", department: "CSE", age: 19, mark: 78 },
+  { rollNo: 104, name: "Divya", department: "ECE", age: 20, mark: 88 },
+  { rollNo: 105, name: "Ravi",  department: "CSE", age: 22, mark: 67 }
+]);</pre></div><h3>a. Marks greater than or equal to 75</h3><div class="code"><button class="copy">Copy</button><pre>printjson(db.students.find({ mark: { $gte: 75 } }).toArray());</pre></div><h3>b. Age less than 21</h3><div class="code"><button class="copy">Copy</button><pre>printjson(db.students.find({ age: { $lt: 21 } }).toArray());</pre></div><h3>c. Students belonging to either CSE or IT</h3><div class="code"><button class="copy">Copy</button><pre>printjson(db.students.find({ department: { $in: ["CSE", "IT"] } }).toArray());</pre></div><h3>d. Top three students based on marks</h3><div class="code"><button class="copy">Copy</button><pre>printjson(db.students.find().sort({ mark: -1 }).limit(3).toArray());</pre></div><h3>e. Update multiple records using updateMany() (+5 marks for CSE)</h3><div class="code"><button class="copy">Copy</button><pre>db.students.updateMany({ department: "CSE" }, { $inc: { mark: 5 } });
+printjson(db.students.find({ department: "CSE" }).toArray());   // verify</pre></div><p class="muted">Run: <code>mongosh --file scripts/05_query_operations.js</code></p></section></main>
+<footer>© 2026 FitLife Training Center. Ex. No. 9, MongoDB Shell Commands.</footer>
+<script>
+document.querySelectorAll(".copy").forEach(b=>b.addEventListener("click",()=>{
+  navigator.clipboard.writeText(b.nextElementSibling.innerText).then(()=>{b.textContent="Copied!";setTimeout(()=>b.textContent="Copy",1500)})
+}));
+</script></body></html>
